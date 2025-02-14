@@ -24,7 +24,7 @@ public static class SwaggerExtensions
         serviceCollection.AddSwaggerGen();
 
         const string version = "v1";
-        var executingAssembly = Assembly.GetExecutingAssembly();
+        var executingAssembly = Assembly.GetCallingAssembly();
 
         serviceCollection.AddSwaggerGen(swaggerGenOptions =>
         {
@@ -46,6 +46,10 @@ public static class SwaggerExtensions
             return;
 
         webApplication.UseSwagger();
-        webApplication.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "v1"));
-    }
+        webApplication.UseSwaggerUI(swaggerUiOptions =>
+        {
+            swaggerUiOptions.SwaggerEndpoint("swagger/v1/swagger.json", "v1");
+            swaggerUiOptions.RoutePrefix = string.Empty;
+        });
+    }   
 }
