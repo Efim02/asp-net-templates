@@ -3,6 +3,7 @@
 using System.Reflection;
 
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
@@ -39,10 +40,11 @@ public static class SwaggerExtensions
         });
     }
 
-    public static void ParametrizeSwagger(this WebApplication webApplication)
+    public static void ParametrizeSwagger(this IApplicationBuilder webApplication,
+        IWebHostEnvironment webHostEnvironment)
     {
         // Configure the HTTP request pipeline.
-        if (!webApplication.Environment.IsDevelopment())
+        if (!webHostEnvironment.IsDevelopment())
             return;
 
         webApplication.UseSwagger();
