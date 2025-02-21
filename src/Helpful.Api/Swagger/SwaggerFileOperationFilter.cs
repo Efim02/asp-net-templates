@@ -20,7 +20,7 @@ public class SwaggerFileOperationFilter : IOperationFilter
 
         var fileParams = context.MethodInfo.GetParameters().Where(p => p.ParameterType == typeof(IFormFile)).ToList();
         var schema = operation.RequestBody.Content[fileUploadMime].Schema;
-        schema.Properties = fileParams.ToDictionary(k => k.Name!, v => new OpenApiSchema
+        schema.Properties = fileParams.ToDictionary(k => k.Name!, _ => new OpenApiSchema
         {
             Type = "string",
             Format = "binary"
