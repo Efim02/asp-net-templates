@@ -21,4 +21,10 @@ public static class JsonStringContentExtensions
         var json = await content.ReadAsStringAsync();
         return JsonConvert.DeserializeObject<T>(json, JsonUtils.GetReferencedSettings())!;
     }
+    
+    public static async Task<T> FromJsonStringContent<T>(this Stream stream)
+    {
+        var json = await new StreamReader(stream).ReadToEndAsync();
+        return JsonConvert.DeserializeObject<T>(json, JsonUtils.GetReferencedSettings())!;
+    }
 }
