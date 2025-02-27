@@ -51,8 +51,8 @@ public static class JsonUtils
     /// <param name="serializerSettings"> Настройки Json форматировщика. </param>
     public static void SetReferencedSettings(this JsonSerializerSettings serializerSettings)
     {
-        serializerSettings.TypeNameHandling = TypeNameHandling.Auto;
-        serializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Serialize;
-        serializerSettings.PreserveReferencesHandling = PreserveReferencesHandling.Objects;
+        // serializerSettings.TypeNameHandling = TypeNameHandling.Auto;
+        // serializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Serialize;
+        // serializerSettings.PreserveReferencesHandling = PreserveReferencesHandling.Objects;
     }
 }
