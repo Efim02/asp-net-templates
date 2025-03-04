@@ -1,14 +1,33 @@
 ﻿namespace Helpful.Api.Extensions;
 
-public static class LinqExtensions
+using System;
+using System.Collections.Generic;
+
+/// <summary>
+/// Расширение для получения результатов фильтрации: обоих случаев.
+/// </summary>
+public static class SplitByEnumerableExtensions
 {
+    /// <summary>
+    /// Делит коллекцию элементов по предикату, на две коллекции.
+    /// </summary>
+    /// <returns> True элементы - выполнившие предикат, остальные False - элементы. </returns>
     public static SplitByResult<T> SplitBy<T>(this IEnumerable<T> enumerable, Func<T, bool> predicate)
     {
-        var list = enumerable.ToList();
+        var trueItems = new List<T>();
+        var falseItems = new List<T>();
+        foreach (var item in enumerable)
+        {
+            if (predicate.Invoke(item))
+                trueItems.Add(item);
+            else
+                falseItems.Add(item);
+        }
+
         return new SplitByResult<T>
         {
-            IsTrue = list.Where(predicate).ToList(),
-            IsFalse = list.Where(a => !predicate(a)).ToList()
+            IsFalse = falseItems,
+            IsTrue = trueItems
         };
     }
 }
@@ -17,15 +36,15 @@ public static class LinqExtensions
 /// Результат разделения коллекции.
 /// </summary>
 /// <typeparam name="T"> Тип элемента коллекции. </typeparam>
-public record SplitByResult<T>
+public class SplitByResult<T>
 {
-    /// <summary>
-    /// Предикат положительный.
-    /// </summary>
-    public required IReadOnlyCollection<T> IsTrue { get; init; }
-
     /// <summary>
     /// Предикат отрицательный.
     /// </summary>
-    public required IReadOnlyCollection<T> IsFalse { get; init; }
+    public IReadOnlyCollection<T> IsFalse { get; set; }
+
+    /// <summary>
+    /// Предикат положительный.
+    /// </summary>
+    public IReadOnlyCollection<T> IsTrue { get; set; }
 }
