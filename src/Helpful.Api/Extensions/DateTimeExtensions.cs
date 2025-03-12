@@ -7,17 +7,31 @@ public static class DateTimeExtensions
     /// the "Unix epoch" 1970-01-01T00:00:00Z (UTC).
     /// This value is independent of the time zone.
     /// </summary>
-    public static long MillisecondsSinceEpoch(this DateTime dateTime)
+    public static DateTime GetLikeUtc(this DateTime dateTime)
     {
-        var universalDateTime = dateTime.ToUniversalTime();
-        return new DateTimeOffset(universalDateTime).ToUnixTimeMilliseconds();
+        return new DateTime(dateTime.Year, dateTime.Month, dateTime.Day, dateTime.Hour, dateTime.Minute,
+            dateTime.Second, dateTime.Millisecond, DateTimeKind.Utc);
     }
-    
+
     /// <summary>
     /// The DateTime since the "Unix epoch" 1970-01-01T00:00:00Z (UTC).
     /// </summary>
-    public static DateTime DateTimeSinceEpoch(this long timeStamp)
+    public static DateTime ToDateTimeSinceEpoch(this long timeStamp)
     {
-        return DateTimeOffset.FromUnixTimeMilliseconds(timeStamp).UtcDateTime;
+        return DateTimeOffset.FromUnixTimeMilliseconds(timeStamp).DateTime;
+    }
+
+    /// <summary>
+    /// The number of milliseconds since
+    /// the "Unix epoch" 1970-01-01T00:00:00Z (UTC).
+    /// This value is independent of the time zone.
+    /// </summary>
+    public static long ToMillisecondsSinceEpoch(this DateTime dateTime)
+    {
+        var dateTimeUtc = dateTime.Kind == DateTimeKind.Unspecified 
+            ? dateTime.GetLikeUtc() 
+            : dateTime;
+        
+        return new DateTimeOffset(dateTimeUtc).ToUnixTimeMilliseconds();
     }
 }
