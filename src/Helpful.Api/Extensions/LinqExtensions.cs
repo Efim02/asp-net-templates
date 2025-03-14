@@ -9,6 +9,17 @@ using System.Collections.Generic;
 public static class SplitByEnumerableExtensions
 {
     /// <summary>
+    /// Удаляет набор элементов из колллекции.
+    /// </summary>
+    public static void RemoveRange<T>(this ICollection<T> collection, IEnumerable<T> items)
+    {
+        foreach (var item in items)
+        {
+            collection.Remove(item);
+        }
+    }
+    
+    /// <summary>
     /// Делит коллекцию элементов по предикату, на две коллекции.
     /// </summary>
     /// <returns> True элементы - выполнившие предикат, остальные False - элементы. </returns>
