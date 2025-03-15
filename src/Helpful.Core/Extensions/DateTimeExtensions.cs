@@ -1,4 +1,4 @@
-﻿namespace Helpful.Api.Extensions;
+﻿namespace Helpful.Core.Extensions;
 
 public static class DateTimeExtensions
 {
