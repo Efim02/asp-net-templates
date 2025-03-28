@@ -9,6 +9,11 @@ using Newtonsoft.Json;
 /// </summary>
 public static class JsonStringContentExtensions
 {
+    public static string ToJsonString(this object value)
+    {
+        return JsonConvert.SerializeObject(value);
+    }
+    
     public static StringContent ToJsonStringContent(this object value)
     {
         return new StringContent(JsonConvert.SerializeObject(value),
