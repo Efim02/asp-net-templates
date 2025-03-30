@@ -1,4 +1,4 @@
-namespace Helpful.Api.Json;
+namespace Helpful.Core.Json;
 
 using System.Text;
 
@@ -27,8 +27,9 @@ public static class JsonStringContentExtensions
         return JsonConvert.DeserializeObject<T>(json, JsonUtils.GetReferencedSettings())!;
     }
     
-    public static async Task<T> FromJsonStringContent<T>(this Stream stream)
+    public static async Task<T> FromJsonStream<T>(this Stream stream)
     {
+        stream.Seek(0, SeekOrigin.Begin);
         var json = await new StreamReader(stream).ReadToEndAsync();
         return JsonConvert.DeserializeObject<T>(json, JsonUtils.GetReferencedSettings())!;
     }

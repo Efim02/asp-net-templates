@@ -1,4 +1,4 @@
-namespace Sport.Dto.Common;
+namespace Helpful.Core.Common;
 
 /// <summary>
 /// Может сравниваться с типом T по свойствам.

@@ -1,4 +1,4 @@
-﻿namespace Sport.Dto.Common;
+﻿namespace Helpful.Core.Common;
 
 /// <summary>
 /// Range - для дат.

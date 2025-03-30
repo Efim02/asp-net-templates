@@ -1,4 +1,4 @@
-﻿namespace Helpful.Api.Extensions;
+﻿namespace Helpful.Core.Extensions;
 
 using System;
 using System.Collections.Generic;

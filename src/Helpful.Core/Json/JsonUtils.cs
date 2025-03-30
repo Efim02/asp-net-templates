@@ -1,4 +1,4 @@
-namespace Helpful.Api.Json;
+namespace Helpful.Core.Json;
 
 using Newtonsoft.Json;
 
