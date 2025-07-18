@@ -28,10 +28,10 @@ public static class DateTimeExtensions
     /// </summary>
     public static long ToMillisecondsSinceEpoch(this DateTime dateTime)
     {
-        var dateTimeUtc = dateTime.Kind == DateTimeKind.Unspecified 
-            ? dateTime.GetLikeUtc() 
+        var dateTimeUtc = dateTime.Kind == DateTimeKind.Unspecified
+            ? dateTime.GetLikeUtc()
             : dateTime;
-        
+
         return new DateTimeOffset(dateTimeUtc).ToUnixTimeMilliseconds();
     }
 }

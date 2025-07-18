@@ -24,7 +24,8 @@ public static class ServiceCollectionExtensions
     /// <param name="services"> Коллекция сервисов. </param>
     /// <param name="implFactory"> Фабрика создания реализации. </param>
     /// <param name="serviceLifetime"> Жизненный цикл сервиса. </param>
-    public static void ReplaceService<TService>(this IServiceCollection services,
+    public static void ReplaceService<TService>(
+        this IServiceCollection services,
         Func<IServiceProvider, TService> implFactory,
         ServiceLifetime serviceLifetime = ServiceLifetime.Scoped)
         where TService : class

@@ -3,6 +3,17 @@ namespace Helpful.Core.Common;
 /// <summary>
 /// Может сравниваться с типом T по свойствам.
 /// </summary>
+public interface IEqualsProperties
+{
+    /// <summary>
+    /// Сравнивает текущий объект с указанным по свойствам.
+    /// </summary>
+    bool EqualsByProperties(object other);
+}
+
+/// <summary>
+/// Может сравниваться с типом T по свойствам.
+/// </summary>
 /// <typeparam name="T"> Тип. </typeparam>
 public interface IEqualsProperties<in T>
 {
@@ -20,7 +31,8 @@ public static class EqualsPropertiesExtensions
     /// <summary>
     /// Сравнивает по свойствам объекты, которые могут быть null.
     /// </summary>
-    public static bool EqualsByPropertiesNullables<T>(this IEqualsProperties<T>? obj,
+    public static bool EqualsByPropertiesNullables<T>(
+        this IEqualsProperties<T>? obj,
         IEqualsProperties<T>? other)
     {
         return (obj is null && other is null) ||
@@ -30,17 +42,19 @@ public static class EqualsPropertiesExtensions
     /// <summary>
     /// Сравнивает по свойствам объекты, один из которых может быть null.
     /// </summary>
-    public static bool EqualsByPropertiesNullable<T>(this IEqualsProperties<T> obj,
+    public static bool EqualsByPropertiesNullable<T>(
+        this IEqualsProperties<T> obj,
         IEqualsProperties<T>? other)
     {
-        return (other is not null&& obj.EqualsByProperties((T)other));
+        return other is not null && obj.EqualsByProperties((T)other);
     }
 
     /// <summary>
     /// Сравнивает коллекции.
     /// </summary>
     /// <returns> True - если коллекции по кол-ву и элементы по свойствам равны. </returns>
-    public static bool EqualsByProperties<T>(this IEnumerable<IEqualsProperties<T>> enumerable1,
+    public static bool EqualsByProperties<T>(
+        this IEnumerable<IEqualsProperties<T>> enumerable1,
         IEnumerable<IEqualsProperties<T>> enumerable2,
         Func<T, object>? getOrderProperty = null)
     {

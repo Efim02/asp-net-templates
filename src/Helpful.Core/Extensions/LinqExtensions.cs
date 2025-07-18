@@ -1,8 +1,5 @@
 ﻿namespace Helpful.Core.Extensions;
 
-using System;
-using System.Collections.Generic;
-
 /// <summary>
 /// Расширение для получения результатов фильтрации: обоих случаев.
 /// </summary>
@@ -13,12 +10,9 @@ public static class SplitByEnumerableExtensions
     /// </summary>
     public static void RemoveRange<T>(this ICollection<T> collection, IEnumerable<T> items)
     {
-        foreach (var item in items)
-        {
-            collection.Remove(item);
-        }
+        foreach (var item in items) collection.Remove(item);
     }
-    
+
     /// <summary>
     /// Делит коллекцию элементов по предикату, на две коллекции.
     /// </summary>
@@ -28,12 +22,10 @@ public static class SplitByEnumerableExtensions
         var trueItems = new List<T>();
         var falseItems = new List<T>();
         foreach (var item in enumerable)
-        {
             if (predicate.Invoke(item))
                 trueItems.Add(item);
             else
                 falseItems.Add(item);
-        }
 
         return new SplitByResult<T>
         {

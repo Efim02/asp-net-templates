@@ -11,7 +11,11 @@ using Microsoft.AspNetCore.Routing;
 public class CustomRouteConstraint<TEnum> : IRouteConstraint where TEnum : struct, Enum
 {
     /// <inheritdoc />
-    public bool Match(HttpContext? httpContext, IRouter? route, string routeKey, RouteValueDictionary values,
+    public bool Match(
+        HttpContext? httpContext,
+        IRouter? route,
+        string routeKey,
+        RouteValueDictionary values,
         RouteDirection routeDirection)
     {
         var routeValueString = values[routeKey]?.ToString();

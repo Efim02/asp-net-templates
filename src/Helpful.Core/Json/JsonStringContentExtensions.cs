@@ -1,7 +1,6 @@
 namespace Helpful.Core.Json;
 
 using System.Text;
-
 using Newtonsoft.Json;
 
 /// <summary>
@@ -13,7 +12,7 @@ public static class JsonStringContentExtensions
     {
         return JsonConvert.SerializeObject(value);
     }
-    
+
     public static StringContent ToJsonStringContent(this object value)
     {
         return new StringContent(JsonConvert.SerializeObject(value),
@@ -26,7 +25,7 @@ public static class JsonStringContentExtensions
         var json = await content.ReadAsStringAsync();
         return JsonConvert.DeserializeObject<T>(json, JsonUtils.GetReferencedSettings())!;
     }
-    
+
     public static async Task<T> FromJsonStream<T>(this Stream stream)
     {
         stream.Seek(0, SeekOrigin.Begin);

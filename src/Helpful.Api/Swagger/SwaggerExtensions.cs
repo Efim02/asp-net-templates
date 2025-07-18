@@ -1,7 +1,6 @@
 ﻿namespace Helpful.Api.Swagger;
 
 using System.Reflection;
-
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
@@ -40,7 +39,8 @@ public static class SwaggerExtensions
         });
     }
 
-    public static void ParametrizeSwagger(this IApplicationBuilder webApplication,
+    public static void ParametrizeSwagger(
+        this IApplicationBuilder webApplication,
         IWebHostEnvironment webHostEnvironment)
     {
         // Configure the HTTP request pipeline.
@@ -53,5 +53,5 @@ public static class SwaggerExtensions
             swaggerUiOptions.SwaggerEndpoint("swagger/v1/swagger.json", "v1");
             swaggerUiOptions.RoutePrefix = string.Empty;
         });
-    }   
+    }
 }
