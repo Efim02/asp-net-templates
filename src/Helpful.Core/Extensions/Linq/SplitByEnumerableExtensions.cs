@@ -1,4 +1,4 @@
-﻿namespace Helpful.Core.Extensions;
+﻿namespace Helpful.Core.Extensions.Linq;
 
 /// <summary>
 /// Расширение для получения результатов фильтрации: обоих случаев.
