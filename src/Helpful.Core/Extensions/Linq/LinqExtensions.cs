@@ -73,4 +73,9 @@ public static class LinqExtensions
     {
         return CollectionExtensions.Next(enumerable.ToList(), element, isCycle);
     }
+    
+    /// <summary>
+    /// Объединяет строки через разделитель.
+    /// </summary>
+    public static string Join(this IEnumerable<string> source, string separator) => string.Join(separator, source);
 }
