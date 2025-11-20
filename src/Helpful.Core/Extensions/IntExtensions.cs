@@ -5,7 +5,7 @@ using System;
 /// <summary>
 /// Утилита для типа Int.
 /// </summary>
-public static class IntUtility
+public static class IntExtensions
 {
     /// <summary>
     /// Сжатая реализация округления до целого числа.
@@ -20,7 +20,7 @@ public static class IntUtility
     /// <summary>
     /// Берет число в промежутке.
     /// </summary>
-    public static int Clamp(this int value, int min = 0, int max = 1)
+    public static int Clamp(this int value, int min, int max)
     {
         return value < min ? min : value > max ? max : value;
     }
