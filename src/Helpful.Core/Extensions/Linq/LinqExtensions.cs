@@ -199,4 +199,268 @@ public static class LinqExtensions
             return countEquals;
         }
 
+    
+        /// <summary>
+        /// Получает только определенное количество элементов или все элементы если всех элементов не хватает.
+        /// </summary>
+        public static IEnumerable<T> TakeAllOrByCount<T>(this IEnumerable<T> source, int count)
+        {
+            using (var enumerator = source.GetEnumerator())
+            {
+                for (var index = 0; index < count; index++)
+                {
+                    if (!enumerator.MoveNext())
+                        break;
+
+                    yield return enumerator.Current;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Получает плоский список листьев дерева.
+        /// </summary>
+        /// <remarks> Проверяет есть ли в узле элементы и если нет, то возвращает этот элемент. </remarks>
+        public static IEnumerable<T> FlattenLeaves<T>(
+            this IEnumerable<T> elements,
+            Func<T, IEnumerable<T>> getChildren)
+        {
+            foreach (var element in elements)
+            {
+                if (!getChildren(element).Any())
+                    yield return element;
+
+                var subElements = FlattenLeaves(getChildren(element), getChildren);
+                foreach (var subElelement in subElements)
+                {
+                    yield return subElelement;
+                }
+            }
+        }
+
+
+        /// <summary>
+        /// Агрегирование, через создание chain-ов между элементами.
+        /// </summary>
+        public static IEnumerable<TR> ChainAggregate<T, TR>(
+            this IEnumerable<T> source, Func<T, T, TR> createChainFunc)
+        {
+            var hasFirst = false;
+            T first = default;
+
+            foreach (var item in source)
+            {
+                if (!hasFirst)
+                {
+                    first = item;
+                    hasFirst = true;
+                    continue;
+                }
+
+                yield return createChainFunc(first, item);
+                first = item;
+            }
+        }
+
+        /// <summary>
+        /// Начинает перечисление с указанного элемента, сравнивая объекты через указанную функцию или по-умолчанию.
+        /// </summary>
+        public static IEnumerable<T> StartWith<T>(
+            this IEnumerable<T> elements,
+            T firstElement,
+            Func<T, IComparable> getPropertyFunc = null)
+        {
+            bool EqualsByFuncOrDefault(T a, T b)
+            {
+                return getPropertyFunc == null
+                    ? a.Equals(b)
+                    : getPropertyFunc(a).Equals(getPropertyFunc(b));
+            }
+
+            // Элементы, которые окажутся позади.
+            var backElements = new List<T>();
+            var foundFirstElement = false;
+
+            foreach (var element in elements)
+            {
+                if (EqualsByFuncOrDefault(element, firstElement) || foundFirstElement)
+                {
+                    foundFirstElement = true;
+                    yield return element;
+                    continue;
+                }
+
+                backElements.Add(element);
+            }
+
+            if (!foundFirstElement)
+                throw new InvalidOperationException($"В коллекции {elements.GetType().Name}, не найдет первый элемент");
+
+            foreach (var backElement in backElements)
+            {
+                yield return backElement;
+            }
+        }
+
+        /// <summary>
+        /// Преобразует в стек.
+        /// </summary>
+        public static Stack<T> ToStack<T>(this IEnumerable<T> source)
+        {
+            var list = source.ToList();
+            
+            // Иначе список будет выдаваться не в этом порядке.
+            list.Reverse();
+            return new Stack<T>(list);
+        }
+
+        /// <summary>
+        /// Преобразует в очередь.
+        /// </summary>
+        public static Queue<T> ToQueue<T>(this IEnumerable<T> source)
+        {
+            return new Queue<T>(source);
+        }
+
+        /// <summary>
+        /// Получает индекс элемента в последовательности. -1 - значит не содержится.
+        /// </summary>
+        public static int IndexOf<T>(this IEnumerable<T> source, T element)
+        {
+            var index = 0;
+            foreach (var item in source)
+            {
+                if (item.Equals(element))
+                    return index;
+                index++;
+            }
+
+            return -1;
+        }
+        
+        /// <summary>
+        /// Получает номер элемента в последовательности. 0 - значит не содержится.
+        /// </summary>
+        public static int NumberOf<T>(this IEnumerable<T> source, T element)
+        {
+            return source.IndexOf(element) + 1;
+        }
+        
+        /// <summary>
+        /// Получает элемент в последовательности по индексу или default.
+        /// </summary>
+        public static T GetByIndexOrDefault<T>(this IEnumerable<T> source, int index)
+        {
+            var currentIndex = 0;
+            foreach (var item in source)
+            {
+                if (currentIndex == index)
+                    return item;
+                
+                currentIndex++;
+            }
+
+            return default;
+        }
+         
+        /// <summary>
+        /// Пустой ли список.
+        /// </summary>
+        public static bool Empty<T>(this IEnumerable<T> list)
+        {
+            return !list.Any();
+        }
+
+        /// <summary>
+        /// Имеются ли элементы в списке.
+        /// </summary>
+        public static bool Has<T>(this IEnumerable<T> list)
+        {
+            return list.Any();
+        }
+
+        /// <summary>
+        /// Сортирует, если условие выполняется.
+        /// </summary>
+        public static IEnumerable<T> OrderByIf<T,TR>(
+            this IEnumerable<T> enumerable, bool condition, Func<T, TR> getPropertyFunc)
+        {
+            return condition ? enumerable.OrderBy(getPropertyFunc) : enumerable;
+        }
+
+        /// <summary>
+        /// Получает перечисление элементов идущих до указанного элемента.
+        /// </summary>
+        public static IEnumerable<T> BeforeEnumerable<T>(this IEnumerable<T> enumerable, T obj)
+        {
+            foreach (var element in enumerable)
+            {
+                if (element.Equals(obj))
+                {
+                    yield break;
+                }
+                
+                yield return element;
+            }
+
+            throw new ArgumentException("Не найден переданный элемент");
+        }
+
+        /// <summary>
+        /// Делит список элементов, на нужное кол-во делений, чтобы в каждом делении т.е. списки было
+        /// не больше указанного кол-ва.
+        /// </summary>
+        public static IEnumerable<IReadOnlyList<T>> SplitByCount<T>(this IEnumerable<T> enumerable, int count)
+        {
+            var currentList = new List<T>();
+            foreach (var element in enumerable)
+            {
+                currentList.Add(element);
+                if (currentList.Count >= count)
+                {
+                    yield return currentList;
+                    currentList = new List<T>();
+                }
+            }
+
+            if (currentList.Count > 0)
+                yield return currentList;
+        }
+
+        /// <summary>
+        /// Объединяет строки через указанный разделитель.
+        /// </summary>
+        public static string Join(this IEnumerable<string> strings, string separator = ", ")
+        {
+            return string.Join(separator, strings);
+        }
+
+        /// <summary>
+        /// Соединяет коллекции если условие выполняется.
+        /// </summary>
+        public static IEnumerable<T> ConcatIf<T>(this IEnumerable<T> enumerable, bool condition, IEnumerable<T> other)
+        {
+            if (condition)
+                return enumerable.Concat(other);
+            
+            return enumerable;
+        }
+        
+        /// <summary>
+        /// Добавить 1 элемент; isAfter - если нужно добавить в конец.
+        /// </summary>
+        public static IEnumerable<T> ConcatOne<T>(this IEnumerable<T> enumerable, T oneElement, bool isAfter = true)
+        {
+            if (!isAfter)
+                yield return oneElement;
+            
+            foreach (var element in enumerable)
+            {
+                yield return element;
+            }
+            
+            if (isAfter)
+                yield return oneElement;
+        }
+
 }
