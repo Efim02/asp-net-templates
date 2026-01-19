@@ -115,6 +115,15 @@ public static class TaskExtensions
     }
 
     /// <summary>
+    /// Ожидает и преобразует перечисление результатов задача в список.
+    /// </summary>
+    public static async Task<List<T>> ToListAsync<T>(this IEnumerable<Task<T>> tasks)
+    {
+        var results = await WhenAll(tasks);
+        return results.ToList();
+    }
+
+    /// <summary>
     /// Ожидает все задачи.
     /// </summary>
     /// <param name="tasks"> Задачи. </param>
