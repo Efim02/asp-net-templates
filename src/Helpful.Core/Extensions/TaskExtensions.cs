@@ -39,14 +39,14 @@ public static class TaskExtensions
         return tasks;
     }
 
-        /// <summary>
-        /// Ожидает все задачи.
-        /// </summary>
-        /// <param name="tasks"> Задачи. </param>
-        public static void WaitAll(this IEnumerable<Task> tasks)
-        {
-            Task.WaitAll(tasks.ToArray());
-        }
+    /// <summary>
+    /// Ожидает все задачи.
+    /// </summary>
+    /// <param name="tasks"> Задачи. </param>
+    public static void WaitAll(this IEnumerable<Task> tasks)
+    {
+        Task.WaitAll(tasks.ToArray());
+    }
 
     /// <summary>
     /// Добавляет задачу в список задач.

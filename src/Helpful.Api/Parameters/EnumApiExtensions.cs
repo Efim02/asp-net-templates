@@ -15,9 +15,11 @@ public static class EnumApiExtensions
         return serviceCollection.Configure<RouteOptions>(options =>
         {
             foreach (var enumConstraintPair in enumConstraints)
+            {
                 options.ConstraintMap.Add(
                     enumConstraintPair.Key.GetType().Name,
                     enumConstraintPair.Value.GetType());
+            }
         });
     }
 }

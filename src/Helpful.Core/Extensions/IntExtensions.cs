@@ -1,6 +1,4 @@
-﻿namespace SYNC.BL.Extensions;
-
-using System;
+﻿namespace Helpful.Core.Extensions;
 
 /// <summary>
 /// Утилита для типа Int.
@@ -14,7 +12,7 @@ public static class IntExtensions
     /// <returns> Результат округления. </returns>
     public static int Round(this double value)
     {
-        return (int) Math.Round(value);
+        return (int)Math.Round(value);
     }
 
     /// <summary>

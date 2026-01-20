@@ -62,7 +62,7 @@ public static class CollectionExtensions
     {
         if (element is null)
             throw new ArgumentNullException(nameof(element));
-        
+
         var index = list.IndexOf(element);
         if (index != list.Count - 1)
             return list[index + 1];
